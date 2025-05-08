@@ -78,6 +78,8 @@ const part3 = (input, budget = 150) => {
         start.costLeft -= items[i].cost;
     }
 
+    console.log('headstart', start);
+
     let queue = new FastPriorityQueue((a, b) => b.costLeft > a.costLeft);
 
     /*items.map(item => queue.add({
