@@ -1,0 +1,136 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>Codyssi 2025 - 16</title>
+</head>
+<body>
+    <script src="input.js"></script>
+    <script src="script.js"></script>
+    <pre>
+Part 1
+Difficulty Rating: 4
+It’s too late. The guardian of Atlantis, Poseidon’s leviathan, is here. The beast must be over a kilometre long.
+
+You feel… strange. A bright light emanates from the leviathan’s eyes, clouding your vision. You feel an unimaginable acceleration?
+
+You float around in what seems like outer space: myriads of stars, galaxies, and nebulae in every direction. Peering into the depths, you can see the faint outlines of shiny chains…
+
+Oh, hey! Your team is here with you! You reach for your laptop… It’s here too!
+
+A strong, resonant voice booms in your head. Is the leviathan using telepathy to communicate with you?
+
+“How brave and foolish of you to take from Atlantis. Trespassers and thieves face one consequence: death.”
+
+Oh, this is it. The leviathan must’ve trapped you in a pocket dimension. There’s no escape!
+
+“However, your journey here speaks volumes about your mental potential. Let’s put that to the test, shall we?”
+
+Suddenly, a glowing cube materialises?
+
+“Solve my puzzle, and I will grant you a chance at survival. Fail to do so, and you’ll remain here, decaying for all eternity.”
+
+Your team shudders. If this isn’t high-risk, high-reward, then what is?
+
+“Try to do better than all those before you, will you? I hate being disappointed.”
+
+Hundreds of skulls, ribcages, and bones float around you. It hits you: no one has ever escaped this mindscape.
+
+Ready to give your all?
+
+The leviathan telepathically explains the problem to you and your team.
+
+The cube has 6 square faces. You look towards the cube: one of its faces is currently facing you directly, positioned upright. The face that is currently facing you is called the ‘current face’.
+
+Each face is an 80 by 80 grid of integers. Initially, every value is set to 1. If the value at any position ever exceeds 100, then 100 is subtracted from it until the value is between 1 and 100.
+
+Hundreds of stars swirl in the background, writing out the information given to you to solve the puzzle.
+
+The file starts with the instructions and is followed by a list of ‘twists’.
+
+Each instruction is given in the format “{target} - VALUE {number}”. The target determines which values on the current face are affected. If the target is “FACE”, then every value on the current face is affected. If the target is “ROW {X}”, then every value on row X is affected. If the target is “COL {X}”, then every value in column X is affected. The number in the instruction determines the amount to add to each value affected by the instruction.
+
+After an instruction is performed, the next twist in the list of twists is performed. This means that the first twist is performed after the first instruction, the second twist is performed after the second instruction, and so on. However, after the last instruction, no twist is performed, as all twists have been used.
+
+Twists are actions that change the ‘current face’ of the cube. There are 4 twists.
+
+The twist “L” rotates the cube one face to the right (so that the new ‘current face’ is one face to the left of the previous ‘current face’).
+The twist “R” rotates the cube one face to the left (so that the new ‘current face’ is one face to the right of the previous ‘current face’).
+The twist “D” rotates the cube one face upwards (so that the new ‘current face’ is one face below the previous ‘current face’).
+The twist “U” rotates the cube one face downwards (so that the new ‘current face’ is one face above the previous ‘current face’).
+
+After a twist, the orientation of the face can change. This is shown in one of the examples below.
+
+When determining which row or column an instruction affects, consider the current orientation of the current face. For rows, the top row is considered as row 1, the second-top row is considered as row 2, and so on. For columns, the leftmost column is considered to be column 1, the second column on the left is considered to be column 2, and so on.
+
+The ‘power’ of an instruction is considered to be the sum of the amounts added to every value affected by the instruction.
+
+On a 80x80 grid, “FACE - VALUE 10” has a power of 10x80x80 = 64000.
+On a 10x10 grid, “ROW 2 - VALUE 50” has a power of 10x50 = 500.
+On a 3x3 grid, “COL 1 - VALUE 5” has a power of 3x5 = 15.
+
+The ‘absorption’ of a face is considered to be the sum of the powers of the instructions performed on that face.
+
+For your first task, perform all the instructions and all the twists in the file in the correct order. Find the ‘absorptions’ of each face of the cube. The answer to this part is the product of the two largest ‘absorption’ values.
+
+For example, consider the following smaller file for a cube with faces that are 3 by 3 grids:
+
+FACE - VALUE 38
+ROW 2 - VALUE 71
+ROW 1 - VALUE 57
+ROW 3 - VALUE 68
+COL 1 - VALUE 52
+
+LURD
+
+
+It doesn’t matter which face or orientation you start on due to the symmetry of the cube. Consider the following cube net, and suppose we start on face 1. At this stage, face 4 is above, face 6 is to the right, face 2 is below, and face 5 is to the left.
+
+  1  
+ 526 
+  3  
+  4  
+
+
+The first instruction, ‘FACE - VALUE 38’, is performed on face 1. On a 3 by 3 grid, this instruction has a power of 342. Hence, face 1 now has a total absorption of 342.
+
+Then, the twist “L” is performed, and the ‘current face’ changes to face 5. The orientation has changed due to the twist. At this stage, face 4 is above, face 1 is to the right, face 2 is below, and face 3 is to the left.
+
+The second instruction, ‘ROW 2 - VALUE 71’, has a power of 213 and is performed on face 5. Hence, face 5 now has a total absorption of 213.
+
+The twist “U” is performed, and the ‘current face’ changes to face 4.
+
+The third instruction, ‘ROW 1 - VALUE 57’, has a power of 171 and is performed on face 4. Hence, face 4 now has a total absorption of 171.
+
+The twist “R” is performed, and the ‘current face’ changes to face 1.
+
+The fourth instruction, ‘ROW 3 - VALUE 68’, has a power of 204 and is performed on face 1. Hence, face 1 now has a total absorption of 546.
+
+The twist “D” is performed, and the ‘current face’ changes to face 5.
+
+The final instruction, ‘COL 1 - VALUE 52’, has a power of 156 and is performed on face 5. Hence, face 5 now has a total absorption of 369.
+
+After all the instructions were performed, the two highest total absorptions were 546 (face 1) and 369 (face 5). The product of these absorptions is 546 x 369 = 201474. Hence, the answer for this file is 201474.
+
+As another example, consider the following file for a cube with faces that are 80 by 80 grids:
+
+FACE - VALUE 38
+COL 32 - VALUE 39
+COL 72 - VALUE 12
+COL 59 - VALUE 56
+COL 77 - VALUE 31
+FACE - VALUE 43
+COL 56 - VALUE 47
+ROW 73 - VALUE 83
+COL 15 - VALUE 87
+COL 76 - VALUE 57
+
+ULDLRLLRU
+
+
+The product of the two highest absorptions for this file is 6902016000, so the answer for this file is 6902016000.
+
+Considering your file, perform all the instructions and all the twists in the file in the correct order, then calculate the absorptions of each face of the cube. What is the product of the two highest absorption values?        
+    </pre>
+</body>
+</html>
