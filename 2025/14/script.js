@@ -144,3 +144,4 @@ part3(input, 300)
 // 260813, 228800 inc
 // new max 456411 reached quality 911 incorrect
 // quality 929 * mats 545 = 506305 incorrect :(
+// new max 481222 reached quality 929 {quality: 929, mats: 518, usedIds: Array(34), costLeft: 0} yay
