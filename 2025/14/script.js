@@ -71,7 +71,7 @@ const part3 = (input, budget = 150) => {
         costLeft: budget
     }
 
-    for (let i = 0; i < 25; i++) {
+    for (let i = 0; i < 28; i++) {
         start.usedIds.push(i);
         start.quality += items[i].quality;
         start.mats += items[i].mats;
