@@ -1,118 +1,85 @@
 const parse = input => {
     let sections = input.split('\n\n');
-    return sections[0].split('\n').map(line => {
-        let [name, val] = line.split(' | ');
-        return {name: name, val: Number(val)}
-    });
+    return [
+        sections[0].split('\n').map(line => {
+            let tmp = line.split(' ');
+            if (tmp[0] == 'FACE') return {
+                code: tmp[0], // FACE
+                val: parseInt(tmp[3])
+            }; else return {
+                code: tmp[0], // ROW|COL
+                id: parseInt(tmp[1]),
+                val: parseInt(tmp[4])
+            }
+        }),
+        sections[1].split('')
+    ]
 }
 
-const parse3 = input => {
-    let sections = input.split('\n\n');
-    return sections[1].split('\n').map(line => {
-        let [name, val] = line.split(' | ');
-        return {name: name, val: Number(val)}
-    });
-}
+let xf = {U: {}, D: {}, L: {}, R: {}}
 
-let nodes = [];
-const addNode = (params, parent = false, layer = 1) => {
-    let newId = nodes.length;
-    nodes.push({
-        id: newId,
-        name: params.name,
-        val: params.val,
-        left: false,
-        right: false,
-        layer: layer,
-        parent: parent
+const initXF = () => {
+    UDPairsLit.split('\n').forEach(line => {
+        let [from, to] = line.split('-');
+        xf.U[from] = to;
+        xf.D[to] = from;
     })
-    return newId;
+    RLPairsLit.split('\n').forEach(line => {
+        let [from, to] = line.split('-');
+        xf.R[from] = to;
+        xf.L[to] = from;
+    })
 }
 
-const place = data => {
-    if (nodes.length == 0) {
-        addNode(data, false, 1);
-        return;
+initXF();
+
+const init2dArr = (size, init = 1) => {
+    let res = [];
+    for (let y = 0; y < size; y++) {
+        res[y] = [];
+        for (let x = 0; x < size; x++) res[y][x] = 1;
     }
-    let cur = 0; // start from root
-    let path = '';
-    while (true) {
-        if (data.val > nodes[cur].val) {
-            // go right
-            if (nodes[cur].right !== false) {
-                path += nodes[cur].name + '-';
-                cur = nodes[cur].right;
-            } else {
-                // add new node, return
-                let newId = addNode(data, cur, nodes[cur].layer+1);
-                nodes[cur].right = newId;
-                return path+nodes[cur].name;
-            }
-        } else {
-            // go left
-            if (nodes[cur].left !== false) {
-                path += nodes[cur].name + '-';
-                cur = nodes[cur].left;
-            } else {
-                // add new node, return
-                let newId = addNode(data, cur, nodes[cur].layer+1);
-                nodes[cur].left = newId;
-                return path+nodes[cur].name;
-            }
+return res;
+}
+
+const initBox = (size = 3) => {
+    let box = {};
+    'ABCDEF'.split('').forEach(b => {
+        box[b] = {
+            data: init2dArr(size),
+            absorbtion: 0,
+
         }
-    }
+    })
+    return box;
 }
 
-const part1 = input => {
-    let data = parse(input);
-    console.log(data);
-
-    nodes = [];
-    data.forEach(dat => place(dat))
-
-    let layers = Math.max(...nodes.map(n => n.layer));
-    console.log('layers', layers);
-    let maxSum = 0;
-    for (let i = 1; i <= layers; i++) {
-        let sum = nodes.filter(n => n.layer == i).reduce((a, v) => a+v.val, 0);
-        console.log(i, sum);
-        if (sum > maxSum) maxSum = sum;
-    }
-    return maxSum*layers;
+const doOp = (op, cur, box) => {
+    let size = box.A.data.length;
+    let side = cur[0];
+    let power = op.val*size;
+    if (op.code === 'FACE') power *= size;
+    box[side].absorbtion += power;
 }
 
-const part2 = input => {
-    let data = parse(input);
-    part1(input);
-    return place({name: 'XXX', val: 500000})
+const part1 = (input, size) => {
+    console.log(xf);
+    let box = initBox(size);
+    console.log(box);
+    let [ops, rots] = parse(input);
+    console.log(ops, rots);
+    let cur = 'A1';
+    ops.forEach((op, i) => {
+        doOp(op, cur, box);
+        if (rots[i] !== undefined) cur = xf[rots[i]][cur];
+        //console.log(cur);
+    })
+    let abs = Object.values(box).map(b => b.absorbtion).sort((a, b) => b-a).slice(0, 2).reduce((a, v) => a*v, 1);
+    return abs;
+
 }
 
-const part3 = input => {
-    let data = parse(input);
-    p3data = parse3(input);
-    let name1 = p3data[0].name;
-    let name2 = p3data[1].name;
-    const getPath = name => {
-        let cur = nodes.filter(n => n.name == name)[0];
-        let res = [];
-        while (cur.id != 0) {
-            res.push(cur.name);
-            cur = nodes[cur.parent];
-        }
-        return res;
-    }
-    part1(input);
-
-    //console.log(nodes.filter(n => n.name == name1)[0]);
-    //console.log(nodes.filter(n => n.name == name2)[0]);
-    let p1 = getPath(name1);
-    let p2 = getPath(name2);
-    return p1.filter(name => p2.includes(name))[0];
-
-    //return place({name: 'XXX', val: 500000})
-}
-
-
-//console.log('p1', part1(input));
-//console.log('p2', part2(input));
-console.log('p3', part3(input));
+//console.log('p1', part1(inputt, 3));
+//console.log('p1', part1(inputt2, 80));
+console.log('p1', part1(input, 80));
+// 116553312537600 inc
