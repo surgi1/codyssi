@@ -1,5 +1,5 @@
 /*
-idea:
+p1 idea:
 steps: 1, 3
 
 0: 1 (jsem tam)
@@ -36,19 +36,38 @@ const parse = input => {
     ]
 }
 
-//const steps = [1, 2, 3, 5, 8]
-
 const part1 = (input) => {
     let [routes, steps] = parse(input);
     console.log(routes);
-    let paths2step = [1,1];
-    for (let i = 2; i <= 99; i++) {
-        paths2step[i] = steps.reduce((a, v) => {
+    let paths2step = [];
+    paths2step[0] = [1,1];
+    for (let i = 2; i <= routes[0].endStep; i++) {
+        paths2step[0][i] = steps.reduce((a, v) => {
             if (i-v < 0) return a;
-            return a + BigInt(paths2step[i-v]);
+            return a + BigInt(paths2step[0][i-v]);
         }, 0n)
     }
-    return paths2step[99];
+    return paths2step[0][routes[0].endStep];
 }
 
-console.log('p1', part1(input));
+// p2 idea is to use the stack; once entered a step that is a branching step, push pointer to currently processed route and reached step to the stack and progress with the branched path up to its end step (unless another branching occurs)
+// what is not clear is what exactly should be done once the end step of the branched path is reached - where to store the result
+// if we do nothing, the lookback (by the steps) would have to be able to look through the branched paths as well - this doesn't feel right
+// perchance the trick could be to add the routes nr backwards against the flow to the ending route?
+const part2 = (input) => {
+    let [routes, steps] = parse(input);
+    console.log(routes);
+    let paths2step = [];
+    paths2step[0] = [1,1];
+    for (let i = 2; i <= routes[0].endStep; i++) {
+        paths2step[0][i] = steps.reduce((a, v) => {
+            if (i-v < 0) return a;
+            return a + BigInt(paths2step[0][i-v]);
+        }, 0n)
+    }
+    return paths2step[0][routes[0].endStep];
+}
+
+//console.log('p1', part1(input));
+
+console.log('p2', part2(inputt));
