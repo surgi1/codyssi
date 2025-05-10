@@ -21,12 +21,26 @@ steps: 1,2
 */
 
 const parse = input => {
-    let sections = input.split('\n\n');
+    let [routesLit, stepsLit] = input.split('\n\n');
+    return [
+        routesLit.split('\n').map(line => {
+            let [_, startStep, endStep, startRoute, endRoute] = line.match(/\d+/g).map(Number);
+            return {
+                startStep: startStep,
+                endStep: endStep,
+                startRoute: startRoute-1,
+                endRoute: endRoute-1
+            }
+        }),
+        stepsLit.match(/\d+/g).map(Number)
+    ]
 }
 
-const steps = [1, 2, 3, 5, 8]
+//const steps = [1, 2, 3, 5, 8]
 
 const part1 = (input) => {
+    let [routes, steps] = parse(input);
+    console.log(routes);
     let paths2step = [1,1];
     for (let i = 2; i <= 99; i++) {
         paths2step[i] = steps.reduce((a, v) => {
@@ -37,4 +51,4 @@ const part1 = (input) => {
     return paths2step[99];
 }
 
-console.log('p1', part1(inputt));
+console.log('p1', part1(input));
