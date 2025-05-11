@@ -54,6 +54,8 @@ const part1 = (input) => {
 // what is not clear is what exactly should be done once the end step of the branched path is reached - where to store the result
 // if we do nothing, the lookback (by the steps) would have to be able to look through the branched paths as well - this doesn't feel right
 // perchance the trick could be to add the routes nr backwards against the flow to the ending route?
+// nah, the lookback must be able to fully branch, this is needed cos of the routes lengths being shorter than our allowed step lengths (even +2)
+// let's create a directional graph
 const part2 = (input) => {
     let [routes, steps] = parse(input);
     console.log(routes);
@@ -70,4 +72,4 @@ const part2 = (input) => {
 
 //console.log('p1', part1(input));
 
-console.log('p2', part2(inputt));
+console.log('p2', part2(input));
