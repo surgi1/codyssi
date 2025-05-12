@@ -121,10 +121,11 @@ const part2 = (input) => {
         }
     }
     runRoute(0);
-    //console.log(paths2step);
+    console.log(paths2step);
     return paths2step[0][routes[0].endStep];
 }
 
 //console.log('p1', part1(input));
-
 console.log('p2', part2(input));
+
+//console.log('p2', part2(inputt2));
