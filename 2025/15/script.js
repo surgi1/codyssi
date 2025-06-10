@@ -1,14 +1,6 @@
-const parse = input => {
+const parse = (input, secNr = 0) => {
     let sections = input.split('\n\n');
-    return sections[0].split('\n').map(line => {
-        let [name, val] = line.split(' | ');
-        return {name: name, val: Number(val)}
-    });
-}
-
-const parse3 = input => {
-    let sections = input.split('\n\n');
-    return sections[1].split('\n').map(line => {
+    return sections[secNr].split('\n').map(line => {
         let [name, val] = line.split(' | ');
         return {name: name, val: Number(val)}
     });
@@ -65,17 +57,14 @@ const place = data => {
 
 const part1 = input => {
     let data = parse(input);
-    console.log(data);
 
     nodes = [];
     data.forEach(dat => place(dat))
 
     let layers = Math.max(...nodes.map(n => n.layer));
-    console.log('layers', layers);
     let maxSum = 0;
     for (let i = 1; i <= layers; i++) {
         let sum = nodes.filter(n => n.layer == i).reduce((a, v) => a+v.val, 0);
-        console.log(i, sum);
         if (sum > maxSum) maxSum = sum;
     }
     return maxSum*layers;
@@ -89,7 +78,7 @@ const part2 = input => {
 
 const part3 = input => {
     let data = parse(input);
-    p3data = parse3(input);
+    let p3data = parse(input, 1);
     let name1 = p3data[0].name;
     let name2 = p3data[1].name;
     const getPath = name => {
@@ -103,16 +92,12 @@ const part3 = input => {
     }
     part1(input);
 
-    //console.log(nodes.filter(n => n.name == name1)[0]);
-    //console.log(nodes.filter(n => n.name == name2)[0]);
     let p1 = getPath(name1);
     let p2 = getPath(name2);
     return p1.filter(name => p2.includes(name))[0];
-
-    //return place({name: 'XXX', val: 500000})
 }
 
 
-//console.log('p1', part1(input));
-//console.log('p2', part2(input));
+console.log('p1', part1(input));
+console.log('p2', part2(input));
 console.log('p3', part3(input));
